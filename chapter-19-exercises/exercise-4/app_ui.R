@@ -3,6 +3,28 @@ library("shiny")
 
 # We'll begin by defining some of the UI elements as variables
 # This helps keep the code organized and easier to debug
+intro_panel <- tabPanel(
+  title = "Introduction",
+  titlePanel("Income growth 1980-2014"), 
+  p("The below diagram was created
+  by the New York Times to illustrate the increasing level of inequality in
+  the US."),
+  img(src = "inequality.png", alt = "Example NYT chart"),
+  p(
+    a(
+      href = "https://www.nytimes.com/interactive/2017/08/07/opinion/leonhardt-income-inequality.html", 
+      "(source)", 
+    )
+  ),
+  p(strong("asjhdgsuaydhijaksd"))
+)
+
+sidebar_content <- sidebarPanel(
+  sliderInput(inputId = "percentile", label = "Income Percentile", 
+              min = 0, max = 100, value = c(0, 100)
+             )
+)
+
 
 # Define a variable `intro_panel` for your first page. It should be a
 # `tabPanel()` with a title "Introduction" to represent the first tab.
@@ -40,7 +62,15 @@ library("shiny")
 
 # Define a variable `main_content` as a `mainPanel()` UI element
 # containing the following information:
-
+  main_content <- mainPanel(
+    plotOutput(outputId = "plot"),
+    p(
+      a(
+        href = "http://gabriel-zucman.eu/usdina/",
+        "(source)"
+      )
+    )
+  )
   # A `plotOutput()` element showing the 'plot' output (defined in the server)
 
 
@@ -50,13 +80,19 @@ library("shiny")
 # Define a variable `growth_panel` for your second page. It should be a
 # `tabPanel()` with a title "Growth Chart" to represent the second tab.
 # This layout will contain the following elements:
-
+  growth_panel <- tabPanel(
+    title = "Growth Chart",
+    titlePanel(title = "Income growth 1980-2014"),
+    sidebarLayout(
+      sidebarPanel = sidebar_content,
+      mainPanel = main_content
+    )
+  )
   # A `titlePanel()` with the text "Income growth 1980-2014"
   
 
   # A `sidebarLayout()` to create two columns.
   # The sidebar layout will contain elements:
-
     # Your `sidebar_content`
 
     # Your `main_content`
@@ -69,3 +105,6 @@ library("shiny")
 # - Your `intro_panel`
 # - Your `growth_panel`
 
+ui <- fluidPage(
+  navbarPage(title = "Income Inequality", intro_panel, growth_panel)
+)
